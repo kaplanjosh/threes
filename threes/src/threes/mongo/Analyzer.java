@@ -4,17 +4,19 @@ import java.util.*;
 
 import org.bson.Document;
 
-import threes.BoardUtil;
+//import threes.BoardUtil;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 
 public class Analyzer {
+/*
 	public void findDeadMoves(Mongo m) {
 		HashMap<String,HashSet<Integer>> cands = getDeadEndCandidates(m);
 		for (String s : cands.keySet()) {
 			BoardUtil.getDeadPercentage(s, cands.get(s));
 		}
+		
 /*
 		Document deadQuery = buildDeadMoveQuery();
 		MongoCursor<Document> cursor = m.runQuery(deadQuery);
@@ -40,8 +42,8 @@ public class Analyzer {
         }	
 		List<Document> docList = new ArrayList<Document>(deadMap.values());
 		m.insertMany(docList, "deadSpot");
-*/
 	}
+*/
 
 	public Document buildDeadMoveQuery() {
 //		Document query = new Document();
