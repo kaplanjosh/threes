@@ -12,7 +12,7 @@ import threes.mongo.*;
 
 public class ThreesSim {
     public static void main(String[] args) {
-    	Mongo m = new Mongo();
+//    	Mongo m = new Mongo();
 /*
     	String s;
     	HashSet<String> deads = new HashSet<String>();
@@ -46,8 +46,9 @@ public class ThreesSim {
 //   		String s = "133035270483354a";
 //   		String s = "132103142471253a";
 //   		String s = "213103020267579a";
-   		String s = "000313340475369a";
-//   		String s = "15334420456348ab";
+//   		String s = "000313340475369a";
+   		String s = "15334420456348ab";
+//   		String s = "15415200456348ab";
    		
     	Board b = new Board(s);
 
@@ -55,7 +56,7 @@ public class ThreesSim {
     	System.out.println(BoardUtil.isDeadBoard(b));
 
      	Aggregator a = new Aggregator(b);
-    	a.setMongo(m);
+//    	a.setMongo(m);
     	int count = 0;
     	long score = 0;
     	long moves = 0;
@@ -66,7 +67,7 @@ public class ThreesSim {
 
     	for (int i = 0; i < 1; i++) {
     		System.out.println(new Date() + " LOOP #" +(i+1));
-	    	a.runLoop(50000,250);
+	    	a.runLoop(1000,20);
 	    	
 	    	count += a.getCount();
 	    	score += a.getScore();
@@ -75,7 +76,7 @@ public class ThreesSim {
 	    	highScore = Math.max(highScore, a.getBestScore());
 	    	highMoves = Math.max(highMoves, a.getBestMoves());
 
-	    	QueryUtil q = new QueryUtil(m);
+//	    	QueryUtil q = new QueryUtil(m);
 //	    	MongoCursor<Document> cursor = q.runIDQuery(a.getKeyStrings());
 //	    	HashMap<String,MergedResults> existingMongo = MergedResults.doTheThing(cursor);
 //	    	a.mergeAndMongo(existingMongo);
@@ -100,6 +101,6 @@ public class ThreesSim {
     	Analyzer az = new Analyzer();
     	az.findDeadMoves(m);
 /*/
-    	m.closeOut();
+//    	m.closeOut();
     }
 }

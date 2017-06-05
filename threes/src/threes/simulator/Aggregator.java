@@ -1,4 +1,5 @@
 package threes.simulator;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 
@@ -15,6 +16,7 @@ public class Aggregator {
 	private String fileName;
 	private int bestScore;
 	private int mostMoves;
+	private int topMergeCount;
 	public HashMap<String,Document> mrMongos;
 	public List<Document> mrMongosNew;
 	public List<Document> mrMongosOld;
@@ -41,6 +43,7 @@ public class Aggregator {
 		count = 0;
 		score = 0;
 		moves = 0;
+		topMergeCount = 0;
 	}
 	
 	public void setFileName(String s) { fileName = s; }
@@ -74,14 +77,17 @@ public class Aggregator {
 		runLoop(loops, 1000);
 	}
 	public void runLoop(int loops, int logCount) {
+		int topStartingTile = seedBoard.getTopTile();
+		DecimalFormat df = new DecimalFormat("#.00"); 
 		for (int i = 1; i <= loops; i++) {
 			if (i%logCount == 0) {
 				System.out.println(new Date() + " " + i  
-						+ " rows: " + results.size()
-						+ " Avg score: " + score/count
-						+ " Avg moves: " + moves*1.0/count
+						//+ " rows: " + results.size()
+						+ " Avg score: " + df.format(score/count)
+						+ " Avg moves: " + df.format(moves*1.0/count)
 						+ " Best score: " + bestScore
-						+ " Most moves: " + mostMoves);
+						+ " Most moves: " + mostMoves
+						+ " Big merges: " + topMergeCount);
 			}
 			
 	    	Simulator s = new Simulator(new Board(seedBoard.getBoardstate()));
@@ -91,7 +97,9 @@ public class Aggregator {
 	    	s.runSim();
 	    	bestScore = Math.max(bestScore, s.getScore());
 	    	mostMoves = Math.max(mostMoves, s.getMoves());
-	    	
+	    	if (s.getTopTile() > topStartingTile) {
+	    		topMergeCount++;
+	    	}
 	    	//recordResults(s.getDecisions());
 	    	count++;
 	    	score += s.getScore();

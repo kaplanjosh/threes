@@ -15,6 +15,40 @@ public class BoardUtil {
 			next.addTile(moveResult, Utilities.moveDirToInt(dir), nextTile);
 		return next;
 	}
+	
+	public static int[] countTiles(int[][] boardstate, int maxTile) {
+		int[] tileCount = new int[maxTile+1];
+
+		for (int i=0; i<=maxTile; i++) {
+			tileCount[i]=0;
+		}
+		for (int i=0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				int thisTile = boardstate[i][j];
+				tileCount[thisTile]++;
+			}
+		}
+		return tileCount;
+	}
+	
+	public static double tileDistance(int[][] boardstate, int tile) {
+		int i1=-1,j1=-1,i2=-1,j2=-1;
+		for (int i=0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				if (boardstate[i][j] == tile) {
+					if (i1 < 0) {
+						i1=i;
+						j1=j;
+					} else if (i2 < 0) {
+						i2=i;
+						j2=j;
+					}
+				}
+			}
+		}
+		double d = Math.abs(i1-i2) + Math.abs(j1-j2);
+		return d;
+	}
 	public static boolean isDeadBoard(Board b) {
 		int[][] state = b.getBoardstate();
 		//check rows
@@ -299,6 +333,16 @@ public class BoardUtil {
 //		for (Integer i : checked) System.out.print(i);
 //		System.out.println();
 		return .32*checked.size();
+	}
+	public static int rowScore(Board b, int row) {
+		int[][] boardstate = b.getBoardstate();
+		int retVal = 0;
+		for (int j = 0; j<4; j++) {
+			int tile = boardstate[row][j];
+			if (tile < 3) retVal += tile;
+			else retVal += Math.pow(3, tile-2);			
+		}
+		return retVal;
 	}
 	public static int zeroCount(Board b) {
 		int[][] bs = b.getBoardstate();
