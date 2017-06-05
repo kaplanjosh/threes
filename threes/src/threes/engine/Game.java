@@ -49,6 +49,13 @@ public class Game {
 		if (moveResult<=0) return false;
 		return addTile(moveResult, Direction.DOWN);
 	}
+	public boolean moveDir(int dir) {
+		if (dir == 0) return moveLeft();
+		if (dir == 1) return moveUp();
+		if (dir == 2) return moveRight();
+		if (dir == 3) return moveDown();
+		return false;	
+	}
 	
 	public void printTiles() {
 		while (!theTiles.isEmpty()) System.out.print(theTiles.pop() + " ");
