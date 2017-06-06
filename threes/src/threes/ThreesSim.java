@@ -1,10 +1,10 @@
 package threes;
 import java.util.*;
 
-import org.bson.Document;
+//import org.bson.Document;
 
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.WriteModel;
+//import com.mongodb.client.MongoCursor;
+//import com.mongodb.client.model.WriteModel;
 
 import threes.simulator.*;
 import threes.engine.*;
@@ -67,7 +67,7 @@ public class ThreesSim {
 
     	for (int i = 0; i < 1; i++) {
     		System.out.println(new Date() + " LOOP #" +(i+1));
-	    	a.runLoop(1000,20);
+	    	a.runLoop(5000,20);
 	    	
 	    	count += a.getCount();
 	    	score += a.getScore();

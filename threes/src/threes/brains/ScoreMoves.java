@@ -118,6 +118,34 @@ public class ScoreMoves {
 		int maxTile = b.getTopTile();
 		int[][] boardstate = b.getBoardstate();
 		int[] counts = BoardUtil.countTiles(boardstate,maxTile);
+
+		if (counts[maxTile] == 1) {
+			int i=0,j=0;
+			outerloop:
+			for (; i<4; i++) {
+				for (; j<4; j++) {
+					if (boardstate[i][j] == maxTile) 
+					break outerloop;
+				}
+			}
+			boolean topBottom = false;
+			//check if it's on a wall or corner
+			if (i == 0 || i == 3) {
+				retVal += Math.max(3,maxTile-2);
+				topBottom = true;
+			}
+			if (j == 0 || j == 3) {
+				retVal += Math.max(3,maxTile-2);
+				if (topBottom) {
+					retVal += Math.max(3,maxTile-2)/2;
+				}
+			}
+
+			//look for next, see if it's nearby
+		} else {
+			//if they're not close, it's really bad
+		}
+		
 		for (int i = maxTile; i>=5; i--) {
 			if (counts[i] == 2) {
 				double dist = BoardUtil.tileDistance(boardstate,i);
@@ -125,8 +153,14 @@ public class ScoreMoves {
 					retVal += Math.pow(3, i-2) / Math.pow(2, dist);
 			}
 		}
+		//extra points for opens
 		if (counts[0] > 0) 
 			retVal += Math.pow(3, counts[0]+3);
+		//take points away for 1,2,3
+		for(int i = 1; i<=3; i++) {
+			retVal -= Math.pow(3, counts[i]);
+		}
+		//double the score for the bottom row
 		retVal += BoardUtil.rowScore(b, 3);
 		return retVal;
 	}
