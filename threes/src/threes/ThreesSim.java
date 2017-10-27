@@ -1,18 +1,19 @@
 package threes;
 import java.util.*;
 
-//import org.bson.Document;
+import org.bson.Document;
 
-//import com.mongodb.client.MongoCursor;
-//import com.mongodb.client.model.WriteModel;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.WriteModel;
 
 import threes.simulator.*;
 import threes.engine.*;
 import threes.mongo.*;
+import threes.analysis.*;
 
 public class ThreesSim {
     public static void main(String[] args) {
-//    	Mongo m = new Mongo();
+    	Mongo m = new Mongo();
 /*
     	String s;
     	HashSet<String> deads = new HashSet<String>();
@@ -47,14 +48,33 @@ public class ThreesSim {
 //   		String s = "132103142471253a";
 //   		String s = "213103020267579a";
 //   		String s = "000313340475369a";
-   		String s = "15334420456348ab";
+//   		String s = "15334420456348ab";
 //   		String s = "15415200456348ab";
-   		
-    	Board b = new Board(s);
+		String s = "00000000800089ab";
 
-    	b.printBoard();
-    	System.out.println(BoardUtil.isDeadBoard(b));
+		Board b = new Board(s);
 
+		// BoardMaker bm = new BoardMaker(b, 0, 2);
+		// bm.setFinalX(2);
+		// bm.setFinalY(3);
+    	// Date start = new Date();
+		// long i = 0;
+		// Board bb = bm.getNext();
+		// while (bb != null) {
+		// 	i++;
+		// 	bb = bm.getNext();
+		// 	if (bb == null) {
+		// 		System.out.println("MAHOOLEEHOO!!! " + i);
+		// 		break;
+		// 	}
+		// }
+		// bm.getCurrent().printBoard();
+    	// long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+		// System.out.println(new Date() + " Finished. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+		bigMerge(m);
+
+
+		/*
      	Aggregator a = new Aggregator(b);
 //    	a.setMongo(m);
     	int count = 0;
@@ -91,7 +111,7 @@ public class ThreesSim {
 		System.out.println(new Date() + " runs: " + count + " score: " + score/count + " moves: " + moves*1.0/count);
 		System.out.println(new Date() + " best: " + highScore + ", " + highMoves + " moves");
 
-/*/    	
+/*    	
  
     	Simulator s = new Simulator(b);
     	s.setMongo(m);
@@ -101,6 +121,60 @@ public class ThreesSim {
     	Analyzer az = new Analyzer();
     	az.findDeadMoves(m);
 /*/
-//    	m.closeOut();
-    }
+    	m.closeOut();
+	}
+	private static void bigMerge(Mongo m) {
+		String s = "00000000800089ab";		
+		Board b = new Board(s);
+		
+		List<Document> ld = new ArrayList<Document>();
+
+		BoardMaker bm = new BoardMaker(b, 0, 2);
+		bm.setFinalX(2);
+		bm.setFinalY(3);
+    	Date start = new Date();
+		int winnerCount = 0;
+
+//		for (int i = 0; i < 500000000; i++) {
+//			Board bb = bm.getNext();
+		long i = 0;
+		Board bb = bm.getNext();
+		while (bb != null) {
+			ld.add(QueryUtil.stringToIDDocument(bb.serialize()));
+
+			i++;
+
+			if (i%1000000 == 0) {
+				long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+				System.out.println(new Date() + " i: " + i + " Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+				m.insertMany(ld,"bigMerge");
+				elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+				System.out.println(new Date() + " Mongo'd. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+				ld.clear();
+			}
+			bb = bm.getNext();
+			if (bb == null) {
+				System.out.println("MAHOOLEEHOO!!! " + i);
+				break;
+			}
+
+			/*
+			if (BigMerge.easyBigMerge(bb, 12, 4) == 1) {
+				bb.printBoard();
+				System.out.println();
+				winnerCount++;
+			}
+			*/
+		}
+		bm.getCurrent().printBoard();
+    	long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+		System.out.println(new Date() + " Finished. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+//		System.out.println("Winner count "+ winnerCount);
+		m.insertMany(ld,"bigMerge");
+		elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+		System.out.println(new Date() + " Mongo'd. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+		//    	b.printBoard();
+//		double merged = BigMerge.easyBigMerge(b, 12, 4);
+//		System.out.println("merged? " + merged);
+	}
 }

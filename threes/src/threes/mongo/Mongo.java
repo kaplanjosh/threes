@@ -48,6 +48,11 @@ public class Mongo {
 		MongoCollection<Document> thisCol = db.getCollection(colName);
 		thisCol.insertMany(sd);
 	}
+	
+	// public void insertMany(List<Document> sd, String colName) {
+	// 	MongoCollection<Document> thisCol = db.getCollection(colName);
+	// 	thisCol.insertMany(sd);
+	// }
 	public List<Document> getRecordByID(String id) {
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", id);

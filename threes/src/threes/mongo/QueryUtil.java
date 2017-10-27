@@ -72,4 +72,14 @@ public class QueryUtil {
 //		System.out.println ("  returning " + move);
 		return move;
 	}
+    public static Document stringToIDDocument(String b) {
+        Document d = new Document();
+        d.put("_id", b);
+        return d;
+    }
+    public static WriteModel<Document> stringToIDWriteModelDocument(String b) {
+        Document d = new Document();
+        d.put("_id", b);
+        return new InsertOneModel<Document>(d);
+    }
 }
