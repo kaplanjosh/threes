@@ -71,7 +71,7 @@ public class ThreesSim {
 		// bm.getCurrent().printBoard();
     	// long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
 		// System.out.println(new Date() + " Finished. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
-		bigMerge(m);
+		bigMergeInserts(m);
 
 
 		/*
@@ -123,8 +123,11 @@ public class ThreesSim {
 /*/
     	m.closeOut();
 	}
-	private static void bigMerge(Mongo m) {
+	private static void bigMergeInserts(Mongo m) {
 		String s = "00000000800089ab";		
+//		String s = "00000800080009ab";		
+//		String s = "00000000088009ab";		
+//		String s = "00000000880009ab";		
 		Board b = new Board(s);
 		
 		List<Document> ld = new ArrayList<Document>();
@@ -147,9 +150,11 @@ public class ThreesSim {
 			if (i%1000000 == 0) {
 				long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
 				System.out.println(new Date() + " i: " + i + " Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
-				m.insertMany(ld,"bigMerge");
+				if (i>147000000) {
+					m.insertMany(ld,"bigMerge");
 				elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
 				System.out.println(new Date() + " Mongo'd. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+				}
 				ld.clear();
 			}
 			bb = bm.getNext();
@@ -176,5 +181,57 @@ public class ThreesSim {
 		//    	b.printBoard();
 //		double merged = BigMerge.easyBigMerge(b, 12, 4);
 //		System.out.println("merged? " + merged);
+	}
+	private static void bigMergeLook(Mongo m) {
+		String s = "00000000008809ab";		
+		Board b = new Board(s);
+		
+		List<Document> ld = new ArrayList<Document>();
+
+		BoardMaker bm = new BoardMaker(b, 2, 1);
+		bm.setFinalX(3);
+		bm.setFinalY(1);
+    	Date start = new Date();
+		int winnerCount = 0;
+
+		// for (int i = 0; i < 500000000; i++) {
+		// 	Board bb = bm.getNext();
+		long i = 0;
+		Board bb = bm.getNext();
+		while (bb != null) {
+			// ld.add(QueryUtil.stringToIDDocument(bb.serialize()));
+			i++;
+
+			if (BigMerge.easyBigMerge(bb, 12, 4) == 1) {
+				bb.printBoard();
+				System.out.println();
+				winnerCount++;
+			}
+			// if (i%1000000 == 0) {
+			// 	long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+			// 	System.out.println(new Date() + " i: " + i + " Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+			// 	m.insertMany(ld,"bigMerge");
+			// 	elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+			// 	System.out.println(new Date() + " Mongo'd. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+			// 	ld.clear();
+			// }
+			bb = bm.getNext();
+			if (bb == null) {
+				System.out.println("MAHOOLEEHOO!!! " + i);
+				break;
+			}
+
+		}
+		bm.getCurrent().printBoard();
+    	long elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+		System.out.println(new Date() + " Finished. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+//		System.out.println("Winner count "+ winnerCount);
+		m.insertMany(ld,"bigMerge");
+		elapsedSeconds = (new Date().getTime() - start.getTime())/1000;
+		System.out.println(new Date() + " Mongo'd. Time: " + elapsedSeconds/60 + ":" +elapsedSeconds%60);
+		//    	b.printBoard();
+//		double merged = BigMerge.easyBigMerge(b, 12, 4);
+//		System.out.println("merged? " + merged);
+		
 	}
 }

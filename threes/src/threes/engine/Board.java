@@ -94,13 +94,25 @@ public class Board {
 	public String serialize() {
 		return serializeBoard();
 	}
-	
+	public int getTileAt(int x, int y) {
+		return boardstate[x][y];
+	}
 	public int[][] getBoardstate() { return boardstate; }
 	public int getTopTile() {
 		int retVal = 0;
 		for (int i = 0; i < 4; i++) {
 			for (int j=0; j<4; j++) {
 				retVal = Math.max(retVal, boardstate[i][j]);
+			}
+		}		
+		return retVal;
+	}
+	public int countTiles(int tileNum) {
+		int retVal = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j=0; j<4; j++) {
+				if (boardstate[i][j] == tileNum)
+					retVal++;
 			}
 		}		
 		return retVal;
