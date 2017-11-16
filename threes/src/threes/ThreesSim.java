@@ -1,4 +1,5 @@
 package threes;
+
 import java.util.*;
 
 import org.bson.Document;
@@ -16,7 +17,7 @@ public class ThreesSim {
 		Mongo m = null;
 		//uncomment to write things
 		//m = new Mongo();
-		
+
   		// String s = "133035270483354a";
   		// String s = "132103142471253a";
   		// String s = "213103020267579a";
@@ -192,9 +193,8 @@ String s = "15334420456348ab";
 	}
 }
 
+/*
 
-
-		/*
     	String s;
     	HashSet<String> deads = new HashSet<String>();
     	List<WriteModel<Document>> ld;
